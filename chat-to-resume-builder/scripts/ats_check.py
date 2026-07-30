@@ -86,7 +86,7 @@ def searchable_text(data):
     """Everything a JD keyword could legitimately live in: bullet text + keyword hints,
     summary, titles, companies, skills, soft skills, certifications."""
     parts = [str((data.get("basics") or {}).get("title") or ""), str(data.get("summary") or "")]
-    for sec in ("experience", "projects"):
+    for sec in ("experience", "projects", "personal_projects"):
         for e in data.get(sec, []) or []:
             parts += [str(e.get(k) or "") for k in ("title", "company", "name")]
             for b in e.get("bullets", []) or []:
@@ -116,7 +116,7 @@ def date_fmt(v):
 
 def all_bullets(data):
     out = []
-    for sec in ("experience", "projects"):
+    for sec in ("experience", "projects", "personal_projects"):
         for e in data.get(sec, []) or []:
             for b in e.get("bullets", []) or []:
                 if isinstance(b, str):          # bare-string bullets are valid; coerce

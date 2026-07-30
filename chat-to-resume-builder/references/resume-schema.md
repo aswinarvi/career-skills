@@ -15,6 +15,7 @@ arrays and empty strings are fine and are simply skipped by the builder.
   "summary":        "string",
   "experience":     [ { ... } ],
   "projects":       [ { ... } ],
+  "personal_projects": [ { ... } ],
   "education":      [ { ... } ],
   "skills":         [ { ... } ],
   "soft_skills":    [ "string" ],
@@ -83,6 +84,12 @@ Each bullet:
   "bullets": [ { "text": "…" } ] }
 ```
 
+## `personal_projects[]` (optional)
+
+Same shape as `projects[]`, rendered as its own "Personal Projects" section. Use it to keep
+personal/open-source work separate when `projects` holds employer work (navy labels that section
+"Key Projects"). Default order places it right after `projects`.
+
 ## `education[]`
 
 | Field | Type | Notes |
@@ -125,7 +132,7 @@ quantified bullets carry far more weight.
 | `format` | string | `"docx"` (default), `"pdf"`, or `"txt"`. `.docx` is the primary deliverable; PDF is produced with the same converter used for the visual check (SKILL.md Step 3). |
 | `page` | string | `"a4"` (default) or `"letter"`. Pick by the user's region — A4 everywhere except the US/Canada. |
 | `theme` | string | `"navy"` (default): navy caps headings, company-first role lines, justified body, "Core Competencies" naming — matches the George reference template. `"classic"`: the original plain monochrome look. Both single-column, ATS-safe. |
-| `section_order` | array of strings | Render order. Default depends on theme — navy: `["summary","skills","experience","projects","education","soft_skills","certifications"]`; classic: `["summary","experience","projects","skills","education","certifications","soft_skills"]`. Reorder on request (e.g. skills-first for a career-changer). |
+| `section_order` | array of strings | Render order. Default depends on theme — navy: `["summary","skills","experience","projects","personal_projects","education","soft_skills","certifications"]`; classic: `["summary","experience","projects","personal_projects","skills","education","certifications","soft_skills"]`. Reorder on request (e.g. skills-first for a career-changer). |
 | `length_target` | string | `"1-page"` or `"2-page"`. Guides how aggressively to trim. |
 | `decisions_log` | array of strings | Append every accepted edit ("removed Objective", "1-page target", "moved Skills above Experience"). Consulted on rebuild so user choices persist across iterations. |
 
