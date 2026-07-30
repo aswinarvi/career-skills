@@ -16,12 +16,12 @@ OUT = sys.argv[2] if len(sys.argv) > 2 else "resume.txt"
 with open(IN, encoding="utf-8") as f:
     data = json.load(f)
 
-KNOWN_TOP = {"basics", "target", "summary", "experience", "projects", "education",
-             "skills", "certifications", "soft_skills", "meta"}
+KNOWN_TOP = {"basics", "target", "summary", "experience", "projects", "personal_projects",
+             "education", "skills", "certifications", "soft_skills", "meta"}
 for k in data:
     if k not in KNOWN_TOP:
         print(f'warning: unknown top-level key "{k}" - not rendered', file=sys.stderr)
-for sec in ("experience", "projects"):
+for sec in ("experience", "projects", "personal_projects"):
     for item in data.get(sec, []) or []:
         if isinstance(item.get("bullets"), list):  # bare-string bullets are valid; coerce
             item["bullets"] = [{"text": b} if isinstance(b, str) else b for b in item["bullets"]]
@@ -73,10 +73,10 @@ def render_experience(items):
         lines.append("")
 
 
-def render_projects(items):
+def render_projects(items, label="Projects"):
     if not items:
         return
-    head("Projects")
+    head(label)
     for p in items:
         name = p.get("name", "")
         role = f" - {p['role']}" if has(p.get("role")) else ""
@@ -142,6 +142,7 @@ R = {
     "summary": lambda: render_summary(None),
     "experience": lambda: render_experience(data.get("experience", [])),
     "projects": lambda: render_projects(data.get("projects", [])),
+    "personal_projects": lambda: render_projects(data.get("personal_projects", []), "Personal Projects"),
     "skills": lambda: render_skills(data.get("skills", [])),
     "education": lambda: render_education(data.get("education", [])),
     "certifications": lambda: render_certifications(data.get("certifications", [])),
@@ -149,7 +150,7 @@ R = {
 }
 
 order = data.get("meta", {}).get("section_order") or \
-    ["summary", "experience", "projects", "skills", "education", "certifications", "soft_skills"]
+    ["summary", "experience", "projects", "personal_projects", "skills", "education", "certifications", "soft_skills"]
 for s in order:
     if s in R:
         R[s]()

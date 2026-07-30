@@ -35,14 +35,14 @@ const warn = (msg) => console.error(`warning: ${msg}`);
 
 // ---- normalize + validate ---------------------------------------------------
 
-const KNOWN_TOP = new Set(["basics", "target", "summary", "experience", "projects",
+const KNOWN_TOP = new Set(["basics", "target", "summary", "experience", "projects", "personal_projects",
   "education", "skills", "certifications", "soft_skills", "meta"]);
 Object.keys(data).forEach((k) => {
   if (!KNOWN_TOP.has(k)) warn(`unknown top-level key "${k}" — it will NOT be rendered`);
 });
 
 // bullets may arrive as bare strings; coerce to { text }
-["experience", "projects"].forEach((sec) => {
+["experience", "projects", "personal_projects"].forEach((sec) => {
   (data[sec] || []).forEach((item) => {
     if (Array.isArray(item?.bullets)) {
       item.bullets = item.bullets.map((b) => (typeof b === "string" ? { text: b } : b));
@@ -71,9 +71,9 @@ const THEMES = {
     nameCaps: false, titleItalic: false, justify: false, companyFirst: false, linkAccent: false,
     headerRule: { style: BorderStyle.SINGLE, size: 4, color: "AAAAAA", space: 4 },
     headingRule: { style: BorderStyle.SINGLE, size: 6, color: "AAAAAA", space: 2 },
-    labels: { summary: "Summary", experience: "Experience", projects: "Projects", skills: "Skills",
+    labels: { summary: "Summary", experience: "Experience", projects: "Projects", personal_projects: "Personal Projects", skills: "Skills",
       education: "Education", certifications: "Certifications", soft_skills: "Soft Skills" },
-    order: ["summary", "experience", "projects", "skills", "education", "certifications", "soft_skills"],
+    order: ["summary", "experience", "projects", "personal_projects", "skills", "education", "certifications", "soft_skills"],
   },
   navy: {
     font: "Calibri",
@@ -83,8 +83,9 @@ const THEMES = {
     headerRule: { style: BorderStyle.SINGLE, size: 12, color: "1F4E79", space: 6 },
     headingRule: { style: BorderStyle.SINGLE, size: 4, color: "BFBFBF", space: 2 },
     labels: { summary: "Professional Summary", experience: "Professional Experience", projects: "Key Projects",
-      skills: "Core Competencies", education: "Education", certifications: "Certifications", soft_skills: "Soft Skills" },
-    order: ["summary", "skills", "experience", "projects", "education", "soft_skills", "certifications"],
+      personal_projects: "Personal Projects", skills: "Core Competencies", education: "Education",
+      certifications: "Certifications", soft_skills: "Soft Skills" },
+    order: ["summary", "skills", "experience", "projects", "personal_projects", "education", "soft_skills", "certifications"],
   },
 };
 const themeKey = String(data?.meta?.theme || "navy").toLowerCase();
@@ -96,6 +97,7 @@ const T = THEMES[themeKey] || THEMES.navy;
 function sectionHeading(text) {
   return new Paragraph({
     spacing: { before: 240, after: 80 },
+    keepNext: true,
     border: { bottom: T.headingRule },
     children: [ new TextRun({ text: text.toUpperCase(), bold: true, size: T.head, color: T.accent, characterSpacing: 12 }) ],
   });
@@ -166,6 +168,19 @@ if (contact.length) {
 
 // ---- section renderers ------------------------------------------------------
 
+function projectList(list, label) {
+  const items = (list || []).filter((p) => has(p?.name));
+  if (!items.length) return;
+  children.push(sectionHeading(label));
+  items.forEach((p) => {
+    const left = [ new TextRun({ text: p.name, bold: true, size: T.body, color: T.accent }) ];
+    if (has(p.role)) left.push(new TextRun({ text: `  —  ${p.role}`, size: T.sub, color: T.grey }));
+    if (has(p.link)) left.push(new TextRun({ text: `  ${p.link}`, size: T.sub, color: T.grey }));
+    children.push(twoSided(left, dateRange(p.start, p.end)));
+    (p.bullets || []).forEach((b) => { if (has(b?.text)) children.push(bullet(b.text)); });
+  });
+}
+
 const renderers = {
   summary() {
     if (!has(data.summary)) return;
@@ -202,18 +217,9 @@ const renderers = {
     });
   },
 
-  projects() {
-    const items = (data.projects || []).filter((p) => has(p?.name));
-    if (!items.length) return;
-    children.push(sectionHeading(T.labels.projects));
-    items.forEach((p) => {
-      const left = [ new TextRun({ text: p.name, bold: true, size: T.body, color: T.accent }) ];
-      if (has(p.role)) left.push(new TextRun({ text: `  —  ${p.role}`, size: T.sub, color: T.grey }));
-      if (has(p.link)) left.push(new TextRun({ text: `  ${p.link}`, size: T.sub, color: T.grey }));
-      children.push(twoSided(left, dateRange(p.start, p.end)));
-      (p.bullets || []).forEach((b) => { if (has(b?.text)) children.push(bullet(b.text)); });
-    });
-  },
+  projects() { projectList(data.projects, T.labels.projects); },
+
+  personal_projects() { projectList(data.personal_projects, T.labels.personal_projects); },
 
   skills() {
     const items = (data.skills || []).filter((g) => has(g?.items));
