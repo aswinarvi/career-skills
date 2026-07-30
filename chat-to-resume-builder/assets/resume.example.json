@@ -1,0 +1,84 @@
+{
+  "basics": {
+    "name": "Riya Nair",
+    "title": "Senior Mobile Engineer (Flutter / Android)",
+    "email": "riya.nair@example.com",
+    "phone": "+91 90000 00000",
+    "location": "Chennai, India",
+    "links": [
+      { "label": "GitHub", "url": "github.com/riyanair" },
+      { "label": "LinkedIn", "url": "linkedin.com/in/riyanair" }
+    ]
+  },
+  "target": {
+    "role": "Staff Mobile Engineer",
+    "company": "",
+    "jd_keywords": ["Flutter", "Kotlin", "CI/CD", "performance", "accessibility", "iOS", "release engineering"]
+  },
+  "summary": "Mobile engineer with 7 years building consumer fintech apps on Flutter and native Android. Owns the release pipeline for an app at 4M monthly active users and has a track record of cutting crash rates and startup time on low-end devices.",
+  "experience": [
+    {
+      "company": "PayCanvas",
+      "title": "Senior Mobile Engineer",
+      "location": "Chennai",
+      "start": "Mar 2022",
+      "end": "Present",
+      "bullets": [
+        { "text": "Cut Android cold-start time 38% by lazy-loading feature modules and deferring analytics init", "metrics": ["38%"], "keywords": ["performance", "Android"] },
+        { "text": "Owned the Flutter-to-native payments SDK integration used across 12 screens, reducing checkout drop-off 9%", "metrics": ["12", "9%"], "keywords": ["Flutter", "payments"] },
+        { "text": "Drove crash-free sessions from 98.1% to 99.6% by instrumenting the render pipeline and fixing a class of overflow bugs", "metrics": ["98.1%", "99.6%"], "keywords": ["stability"] },
+        { "text": "Set up fastlane + GitHub Actions release pipeline, taking store submission from a 2-day manual process to a 40-minute automated one", "metrics": ["2-day", "40-minute"], "keywords": ["CI/CD", "release engineering"] }
+      ]
+    },
+    {
+      "company": "Meridian Retail",
+      "title": "Android Developer",
+      "location": "Bengaluru",
+      "start": "Jun 2019",
+      "end": "Feb 2022",
+      "bullets": [
+        { "text": "Migrated a 140-screen app from Java to Kotlin, cutting the crash rate 22%", "metrics": ["140", "22%"], "keywords": ["Kotlin"] },
+        { "text": "Built an offline-first sync layer with Room and WorkManager for stores on unreliable networks", "metrics": [], "keywords": ["Android", "offline"] },
+        { "text": "Added TalkBack support and dynamic type across the catalog, reaching WCAG AA on the top 20 flows", "metrics": ["20"], "keywords": ["accessibility"] }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "logstream",
+      "role": "Creator",
+      "link": "github.com/riyanair/logstream",
+      "start": "2023",
+      "end": "",
+      "bullets": [
+        { "text": "Open-source desktop viewer that streams live device logs from Android (ADB) and iOS (pymobiledevice3); 600+ GitHub stars", "metrics": ["600"], "keywords": ["Android", "iOS"] }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Anna University",
+      "degree": "B.E.",
+      "field": "Computer Science",
+      "start": "2015",
+      "end": "2019",
+      "details": ["First class with distinction"]
+    }
+  ],
+  "skills": [
+    { "category": "Languages", "items": ["Dart", "Kotlin", "Swift", "Java", "Python"] },
+    { "category": "Frameworks", "items": ["Flutter", "Jetpack Compose", "Riverpod", "Room"] },
+    { "category": "Tooling", "items": ["fastlane", "GitHub Actions", "Firebase", "Gradle", "Xcode"] }
+  ],
+  "certifications": [
+    { "name": "Associate Android Developer", "issuer": "Google", "date": "2020" }
+  ],
+  "meta": {
+    "format": "docx",
+    "page": "a4",
+    "theme": "navy",
+    "section_order": ["summary", "experience", "projects", "skills", "education", "certifications"],
+    "length_target": "1-page",
+    "decisions_log": []
+  }
+}
