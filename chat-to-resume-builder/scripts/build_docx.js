@@ -108,6 +108,7 @@ function sectionHeading(text) {
 function twoSided(leftRuns, rightText, opts = {}) {
   const children = [...leftRuns];
   const para = { spacing: { before: opts.before ?? 120, after: opts.after ?? 20 }, children };
+  if (opts.keepNext) para.keepNext = true;
   if (has(rightText)) {
     children.push(new TextRun({ text: "\t", size: T.sub }));
     children.push(new TextRun({ text: rightText, size: T.sub, color: T.grey, italics: !!opts.rightItalic }));
@@ -176,7 +177,7 @@ function projectList(list, label) {
     const left = [ new TextRun({ text: p.name, bold: true, size: T.body, color: T.accent }) ];
     if (has(p.role)) left.push(new TextRun({ text: `  —  ${p.role}`, size: T.sub, color: T.grey }));
     if (has(p.link)) left.push(new TextRun({ text: `  ${p.link}`, size: T.sub, color: T.grey }));
-    children.push(twoSided(left, dateRange(p.start, p.end)));
+    children.push(twoSided(left, dateRange(p.start, p.end), { keepNext: true }));
     (p.bullets || []).forEach((b) => { if (has(b?.text)) children.push(bullet(b.text)); });
   });
 }
@@ -198,11 +199,12 @@ const renderers = {
       if (T.companyFirst) {
         // line 1: Company … dates    line 2: Title · Location (italic grey)
         const first = has(e.company) ? e.company : e.title;
-        children.push(twoSided([ new TextRun({ text: first, bold: true, size: T.body, color: T.ink }) ], dateRange(e.start, e.end)));
+        children.push(twoSided([ new TextRun({ text: first, bold: true, size: T.body, color: T.ink }) ], dateRange(e.start, e.end), { keepNext: true }));
         const second = [has(e.company) ? e.title : "", e.location].filter(has).join(" · ");
         if (second) {
           children.push(new Paragraph({
             spacing: { before: 0, after: 40 },
+            keepNext: true,
             children: [ new TextRun({ text: second, size: T.sub, italics: true, color: T.grey }) ],
           }));
         }
@@ -211,7 +213,7 @@ const renderers = {
         if (has(e.title)) left.push(new TextRun({ text: e.title, bold: true, size: T.body, color: T.ink }));
         if (has(e.company)) left.push(new TextRun({ text: (left.length ? "  —  " : "") + e.company, size: T.body, color: T.ink }));
         if (has(e.location)) left.push(new TextRun({ text: `  (${e.location})`, size: T.sub, color: T.grey }));
-        children.push(twoSided(left, dateRange(e.start, e.end)));
+        children.push(twoSided(left, dateRange(e.start, e.end), { keepNext: true }));
       }
       (e.bullets || []).forEach((b) => { if (has(b?.text)) children.push(bullet(b.text)); });
     });
@@ -242,7 +244,7 @@ const renderers = {
       if (T.companyFirst) {
         // line 1: Degree – Field … dates    line 2: Institution · Location (italic grey)
         const first = degree || ed.institution;
-        children.push(twoSided([ new TextRun({ text: first, bold: true, size: T.body, color: T.ink }) ], dateRange(ed.start, ed.end)));
+        children.push(twoSided([ new TextRun({ text: first, bold: true, size: T.body, color: T.ink }) ], dateRange(ed.start, ed.end), { keepNext: true }));
         const second = [degree ? ed.institution : "", ed.location].filter(has).join(" · ");
         if (second) {
           children.push(new Paragraph({
